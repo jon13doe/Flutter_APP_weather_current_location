@@ -21,7 +21,7 @@ class WeatherApp extends StatelessWidget {
                   create: (context) =>
                       WeatherBloc()..add(FetchWeather(snap.data as Position)),
                   child: IconsChemaProvider(
-                      iconsChema: IconsChema(elementsView: true),
+                      iconsChema: IconsChema(elementsView: false),
                       child: const HomeScreen()),
                 );
               } else {

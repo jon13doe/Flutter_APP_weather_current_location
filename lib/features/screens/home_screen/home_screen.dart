@@ -7,7 +7,6 @@ import 'package:weather_app_current_location/features/screens/home_screen/png_vi
 import 'package:weather_app_current_location/features/screens/home_screen/widget_elements_view.dart';
 
 import 'hs_elements/index.dart';
-import 'hs_side_menu/index.dart';
 import 'icons_chema.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -42,22 +41,22 @@ class _HomeScreenState extends State<HomeScreen> {
         // systemOverlayStyle: const SystemUiOverlayStyle(
         //   statusBarBrightness: Brightness.dark,
         // ),
-        leading: Builder(builder: (context) {
-          return hideScreen
-              ? Container()
-              : IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.amber,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                    setState(() {
-                      hideScreen = true;
-                    });
-                  });
-        }),
+        // leading: Builder(builder: (context) {
+        //   return hideScreen
+        //       ? Container()
+        //       : IconButton(
+        //           icon: const Icon(
+        //             Icons.menu,
+        //             color: Colors.amber,
+        //             size: 32,
+        //           ),
+        //           onPressed: () {
+        //             Scaffold.of(context).openDrawer();
+        //             setState(() {
+        //               hideScreen = true;
+        //             });
+        //           });
+        // }),
       ),
       body: Center(
         child: OrientationBuilder(builder: (context, orientation) {
@@ -168,18 +167,18 @@ class _HomeScreenState extends State<HomeScreen> {
               : Container();
         }),
       ),
-      drawer: const HomeScreenSideMenu(),
-      onDrawerChanged: (isOpened) {
-        if (isOpened == true) {
-          setState(() {
-            hideScreen = true;
-          });
-        } else {
-          setState(() {
-            hideScreen = false;
-          });
-        }
-      },
+      // drawer: const HomeScreenSideMenu(),
+      // onDrawerChanged: (isOpened) {
+      //   if (isOpened == true) {
+      //     setState(() {
+      //       hideScreen = true;
+      //     });
+      //   } else {
+      //     setState(() {
+      //       hideScreen = false;
+      //     });
+      //   }
+      // },
     );
   }
 }
