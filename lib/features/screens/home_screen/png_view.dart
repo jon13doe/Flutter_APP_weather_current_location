@@ -73,6 +73,11 @@ class PngView extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Container(
+                    height: 150,
+                    color: Colors.amberAccent,
+                    child: HomeScreenMap(),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

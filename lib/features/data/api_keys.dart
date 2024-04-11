@@ -1,0 +1,2 @@
+String WEATHER_API_KEY = 'b931067f06ff7247e639bedb6bb250c8';
+String GOOGLEMAPS_API_KEY = 'AIzaSyCGixmV6kdpykKwKACzfa7Kthktp96PsSA';

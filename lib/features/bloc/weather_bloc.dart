@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/weather.dart';
-import 'package:weather_app_current_location/features/data/weather_data_api_key.dart';
+import 'package:weather_app_current_location/features/data/api_keys.dart';
 
 part 'weather_bloc_event.dart';
 part 'weather_bloc_state.dart';
