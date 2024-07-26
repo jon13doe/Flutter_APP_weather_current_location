@@ -1,21 +1,25 @@
 import 'package:flutter/widgets.dart';
-
 import 'theme_chema.dart';
 
-class ThemeProvider extends InheritedWidget {
+class ThemeProvider extends InheritedNotifier<ValueNotifier<ThemeChema>> {
   final ThemeChema themeChema;
 
-  const ThemeProvider({
+  ThemeProvider({
     super.key,
     required this.themeChema,
     required super.child,
-  });
+  }) : super(
+          notifier: ValueNotifier<ThemeChema>(themeChema),
+        );
 
-  static ThemeProvider? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
+  static ThemeChema? of(BuildContext context) {
+    final provider =
+        context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
+    return provider?.notifier?.value;
+  }
 
-  @override
-  bool updateShouldNotify(covariant ThemeProvider oldWidget) {
-    return true;
+  void updateThemeChema(ThemeChema newThemeChema) {
+    notifier?.value = newThemeChema;
+    notifier?.notifyListeners();
   }
 }

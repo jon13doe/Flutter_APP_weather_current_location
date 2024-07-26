@@ -3,11 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class RegularBackground extends StatelessWidget {
-  final bool lightTheme;
-
   const RegularBackground({
     super.key,
-    required this.lightTheme,
   });
 
   @override

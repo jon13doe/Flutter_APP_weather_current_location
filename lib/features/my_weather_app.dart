@@ -15,47 +15,54 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-        light: customLightTheme,
-        dark: customDarkTheme,
-        initial: AdaptiveThemeMode.light,
-        builder: (light, dark) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: const [
-                S.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: S.delegate.supportedLocales,
-              home: FutureBuilder(
-                  future: _determinePosition(),
-                  builder: (context, snap) {
-                    if (snap.hasData) {
-                      return BlocProvider<WeatherBloc>(
-                        create: (context) => WeatherBloc()
-                          ..add(FetchWeather(snap.data as Position)),
-                        child: ThemeProvider(
-                          themeChema: ThemeChema(
-                            curentColorTheme: 0,
-                            simpleTheme: 0,
-                            animatedTheme: false,
-                            iconTheme: 0,
-                          ),
-                          child: const SafeArea(
-                            child: HomeScreen(),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return const Scaffold(
-                        body: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                  }));
+    return FutureBuilder<ThemeChema?>(
+        future: ThemeChema.loadFromPrefs(),
+        builder: (context, snapshot) {
+          ThemeChema themeChema = snapshot.data ??
+              ThemeChema(
+                curentColorTheme: 0,
+                iconTheme: false,
+                simpleTheme: true,
+                animatedTheme: false,
+              );
+
+          return ThemeProvider(
+            themeChema: themeChema,
+            child: AdaptiveTheme(
+                light: customLightTheme,
+                dark: customDarkTheme,
+                initial: AdaptiveThemeMode.light,
+                builder: (light, dark) {
+                  return MaterialApp(
+                      debugShowCheckedModeBanner: false,
+                      localizationsDelegates: const [
+                        S.delegate,
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                        GlobalCupertinoLocalizations.delegate,
+                      ],
+                      supportedLocales: S.delegate.supportedLocales,
+                      home: FutureBuilder(
+                          future: _determinePosition(),
+                          builder: (context, snap) {
+                            if (snap.hasData) {
+                              return BlocProvider<WeatherBloc>(
+                                create: (context) => WeatherBloc()
+                                  ..add(FetchWeather(snap.data as Position)),
+                                child: const SafeArea(
+                                  child: HomeScreen(),
+                                ),
+                              );
+                            } else {
+                              return const Scaffold(
+                                body: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          }));
+                }),
+          );
         });
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_app_current_location/features/theme/index.dart';
@@ -28,11 +30,11 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    ThemeChema theme = ThemeProvider.of(context)!.themeChema;
+    ThemeChema theme = ThemeProvider.of(context)!;
     int curentColorTheme = theme.curentColorTheme;
-    int simpleTheme = theme.simpleTheme;
+    bool simpleTheme = theme.simpleTheme;
     bool animatedTheme = theme.animatedTheme;
-    int iconTheme = theme.iconTheme;
+    bool iconTheme = theme.iconTheme;
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -57,25 +59,23 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
                       ),
                       Row(
                         children: [
-                          IconButton(
-                            icon: Icon([
+                          DynamicIconButton(
+                            iconsList: const [
                               Icons.light_mode,
                               Icons.dark_mode,
                               Symbols.settings_night_sight,
-                            ][curentColorTheme]),
+                            ],
+                            initState: curentColorTheme,
                             iconSize: 32,
-                            onPressed: () {
+                            onStateChange: (index) {
                               setState(() {
-                                theme.switchCurentColorTheme(
-                                    curentColorTheme != 2
-                                        ? curentColorTheme + 1
-                                        : 0);
+                                theme.switchCurentColorTheme(index);
                                 curentColorTheme = theme.curentColorTheme;
-                                if (curentColorTheme == 0) {
+                                if (index == 0) {
                                   AdaptiveTheme.of(context).setLight();
-                                } else if (curentColorTheme == 1) {
+                                } else if (index == 1) {
                                   AdaptiveTheme.of(context).setDark();
-                                } else if (curentColorTheme == 2) {
+                                } else if (index == 2) {
                                   AdaptiveTheme.of(context).setSystem();
                                 }
                               });
@@ -88,81 +88,72 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: InkWell(
-                              child: Container(
-                                height: 32,
-                                width: 32,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      [Colors.black, Colors.black],
-                                      [Colors.red, Colors.green]
-                                    ][simpleTheme],
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  theme.switchThemeType(
-                                      simpleTheme == 0 ? 1 : 0);
-                                });
-                              },
-                            ),
+                          DynamicIconButton(
+                            iconsList: const [
+                              Symbols.motion_mode,
+                              Symbols.circle_rounded,
+                            ],
+                            initState: simpleTheme ? 1 : 0,
+                            iconSize: 32,
+                            onStateChange: (index) {
+                              setState(() {
+                                theme
+                                    .switchThemeType(index == 0 ? false : true);
+                              });
+                            },
                           ),
                           Text(
-                              'Switch to ${simpleTheme == 1 ? 'regular' : 'simple'} theme'),
+                              'Switch to ${simpleTheme ? 'regular' : 'simple'} theme'),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Switch(
-                              value: iconTheme == 0,
-                              onChanged: (bool newValue) {
-                                setState(() {
-                                  theme.switchIconTheme(1);
-                                });
-                              },
-                            ),
-                          ),
-                          Text(
-                              'Switch ${iconTheme == 0 ? 'off' : 'on'} weather icons'),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Switch(
-                              value: animatedTheme,
-                              onChanged: (bool newValue) {
-                                setState(() {
-                                  theme.switchAnimation(newValue);
-                                });
-                              },
-                            ),
+                          DynamicIconButton(
+                            iconsList: const [
+                              Symbols.slow_motion_video,
+                              Symbols.motion_photos_pause,
+                            ],
+                            initState: animatedTheme ? 1 : 0,
+                            iconSize: 32,
+                            onStateChange: (index) {
+                              setState(() {
+                                theme
+                                    .switchAnimation(index == 0 ? false : true);
+                              });
+                            },
                           ),
                           Text(
                               'Switch ${animatedTheme ? 'off' : 'on'} animation'),
                         ],
                       ),
-                      IconButton(
-                          onPressed: () {
-                            print(theme.param());
-                          },
-                          icon: Icon(Icons.abc))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          DynamicIconButton(
+                            iconsList: const [
+                              Symbols.animated_images,
+                              Symbols.image,
+                            ],
+                            initState: iconTheme ? 1 : 0,
+                            iconSize: 32,
+                            onStateChange: (index) {
+                              setState(() {
+                                theme
+                                    .switchIconTheme(index == 0 ? false : true);
+                              });
+                            },
+                          ),
+                          Text(
+                              'Switch ${iconTheme ? 'off' : 'on'} weather icons'),
+                        ],
+                      ),
+                      TextButton(
+                        child: const Text('Parameters to console'),
+                        onPressed: () {
+                          log(theme.param());
+                        },
+                      ),
                     ],
                   ),
                 ),

@@ -1,9 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ThemeChema {
   int curentColorTheme;
-  int simpleTheme;
+  bool simpleTheme;
   bool animatedTheme;
-  int iconTheme;
+  bool iconTheme;
 
   ThemeChema({
     required this.curentColorTheme,
@@ -14,21 +15,46 @@ class ThemeChema {
 
   switchCurentColorTheme(int newValue) {
     curentColorTheme = newValue;
+    _saveToPrefs();
   }
 
-  switchIconTheme(int newValue) {
-    iconTheme = newValue;
-  }
-
-  switchThemeType(int newValue) {
+  switchThemeType(bool newValue) {
     simpleTheme = newValue;
+    _saveToPrefs();
   }
 
   switchAnimation(bool newValue) {
     animatedTheme = newValue;
+    _saveToPrefs();
+  }
+
+  switchIconTheme(bool newValue) {
+    iconTheme = newValue;
+    _saveToPrefs();
   }
 
   param() {
-    return 'curentColorTheme: $curentColorTheme, $iconTheme, simpleTheme: $simpleTheme, animatedTheme: $animatedTheme';
+    return 'curentColorTheme: $curentColorTheme, simpleTheme: $simpleTheme, animatedTheme: $animatedTheme, iconTheme: $iconTheme';
+  }
+
+  Future<void> _saveToPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('curentColorTheme', curentColorTheme);
+    prefs.setBool('simpleTheme', simpleTheme);
+    prefs.setBool('animatedTheme', animatedTheme);
+    prefs.setBool('iconTheme', iconTheme);
+  }
+
+  static Future<ThemeChema?> loadFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('curentColorTheme')) {
+      return ThemeChema(
+        curentColorTheme: prefs.getInt('curentColorTheme') ?? 0,
+        simpleTheme: prefs.getBool('simpleTheme') ?? true,
+        animatedTheme: prefs.getBool('animatedTheme') ?? false,
+        iconTheme: prefs.getBool('iconTheme') ?? false,
+      );
+    }
+    return null;
   }
 }

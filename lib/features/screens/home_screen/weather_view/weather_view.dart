@@ -19,7 +19,7 @@ class _WeatherViewState extends State<WeatherView> {
     return Stack(
       children: [
         Container(
-          color: Colors.orangeAccent,
+          color: Colors.transparent,
           width: width,
           height: 0.5 * width,
           child: LayoutBuilder(
@@ -27,6 +27,10 @@ class _WeatherViewState extends State<WeatherView> {
             return const Stack(
               alignment: Alignment.center,
               children: [
+                Sun(
+                  smallRay: true,
+                  gradient: false,
+                ),
                 // Positioned(
                 //     top: 0.32 * constraints.maxHeight,
                 //     left: 0.725 * constraints.maxWidth,
@@ -36,7 +40,7 @@ class _WeatherViewState extends State<WeatherView> {
                 //       child: const Precipitation(
                 //         rain: true,
                 //         intensity: 4,
-                //         wind: true,
+                //         wind: 2,
                 //       ),
                 //     )),
                 // Positioned(
@@ -58,7 +62,7 @@ class _WeatherViewState extends State<WeatherView> {
                 //       child: const Precipitation(
                 //         rain: true,
                 //         intensity: 4,
-                //         wind: true,
+                //         wind: 2,
                 //       ),
                 //     )),
                 // Positioned(
@@ -87,7 +91,7 @@ class _WeatherViewState extends State<WeatherView> {
                 //     child: const Precipitation(
                 //       rain: false,
                 //       intensity: 4,
-                //       wind: true,
+                //       wind: 2,
                 //     ),
                 //   ),
                 // ),
