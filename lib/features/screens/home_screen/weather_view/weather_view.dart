@@ -24,13 +24,11 @@ class _WeatherViewState extends State<WeatherView> {
           height: 0.5 * width,
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-            return const Stack(
+            return Stack(
               alignment: Alignment.center,
               children: [
-                Sun(
-                  smallRay: true,
-                  gradient: false,
-                ),
+                //Sun(),
+                Sky(),
                 // Positioned(
                 //     top: 0.32 * constraints.maxHeight,
                 //     left: 0.725 * constraints.maxWidth,

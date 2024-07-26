@@ -4,55 +4,21 @@ import 'package:flutter/material.dart';
 
 class Cloud extends StatefulWidget {
   final int color;
-  const Cloud({super.key, required this.color});
+  const Cloud({
+    super.key,
+    this.color = 0,
+  });
 
   @override
   State<Cloud> createState() => _CloudState();
 }
 
 class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500))
-      ..repeat();
-
-    _animation = Tween(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    Color cloudColor = Colors.white;
-    switch (widget.color) {
-      case 1:
-        cloudColor = Colors.grey;
-      case 2:
-        cloudColor = Colors.black;
-      default:
-        cloudColor = Colors.white;
-    }
-
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
-          color: Colors.greenAccent,
+        return SizedBox(
           width: constraints.maxHeight *
               (4 -
                   4 * sin(pi * (1 - 11 / 12)) +
@@ -65,19 +31,23 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
           child: ClipPath(
             clipper: CloudClipper(),
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    tileMode: TileMode.repeated,
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [_animation.value - 0.5, _animation.value + 0.5],
-                    colors: const [Colors.white, Colors.black]),
-              ),
+              color: cloudColor(color: widget.color),
             ),
           ),
         );
       },
     );
+  }
+
+  cloudColor({required int color}) {
+    switch (color) {
+      case 1:
+        return Colors.grey;
+      case 2:
+        return Colors.black;
+      default:
+        return Colors.white;
+    }
   }
 }
 
