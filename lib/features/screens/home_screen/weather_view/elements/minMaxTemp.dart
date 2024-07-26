@@ -10,7 +10,6 @@ class MinMaxTemp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         bool widthBase =
@@ -28,7 +27,7 @@ class MinMaxTemp extends StatelessWidget {
               child: SizedBox(
                 height: termometer,
                 width: termometer,
-                child: Termometer(maxTemp: maxTemp),
+                child: Text('dfsdfsdfsdf'),
               ),
             ),
             Positioned(
@@ -37,7 +36,12 @@ class MinMaxTemp extends StatelessWidget {
               child: SizedBox(
                 height: iconBase,
                 width: iconBase,
-                child: maxTemp ? const Sun(gradient: false, smallRay: true,) : const Moon(),
+                child: maxTemp
+                    ? const Sun(
+                        gradient: false,
+                        smallRay: true,
+                      )
+                    : const Moon(),
               ),
             ),
           ],

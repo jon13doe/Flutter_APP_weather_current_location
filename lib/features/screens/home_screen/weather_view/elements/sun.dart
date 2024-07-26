@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:weather_app_current_location/features/screens/home_screen/weather_view/elements/ray_circle.dart';
 
 class Sun extends StatelessWidget {
   final bool smallRay;
@@ -23,7 +24,7 @@ class Sun extends StatelessWidget {
         double base = constraints.maxHeight >= constraints.maxWidth
             ? constraints.maxWidth
             : constraints.maxHeight;
-        double bulbDiametr = 0.5 * base;
+        double bulbDiametr = 0.1 * base;
         double bigRayHeight = 0.2 * base;
         double rayWidth = 0.05 * base;
         double smallRayHeight = 0.5 * bigRayHeight;
@@ -31,6 +32,7 @@ class Sun extends StatelessWidget {
         return Stack(
           alignment: Alignment.center,
           children: [
+            RayCircle(gradient: true, rotation: true, height: 0.45 * base),
             Container(
               height: bulbDiametr,
               width: bulbDiametr,
@@ -45,30 +47,30 @@ class Sun extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            ...List.generate(n, (index) {
-              double rayHeight =
-                  smallRay && index % 2 != 0 ? smallRayHeight : bigRayHeight;
-              double koef = smallRay && index % 2 != 0 ? 0.35 : 0.4;
-              double angle = index * (pi * 2) / n;
-              double x = koef * base * cos(angle);
-              double y = -koef * base * sin(angle);
-              return Positioned(
-                top: 0.5 * constraints.maxHeight - x - 0.5 * rayHeight,
-                left: 0.5 * constraints.maxWidth - y - 0.5 * rayWidth,
-                child: Transform.rotate(
-                  angle: angle,
-                  child: Container(
-                    height:
-                        smallRay && index % 2 != 0 ? smallRayHeight : rayHeight,
-                    width: rayWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(0.5 * rayWidth),
-                    ),
-                  ),
-                ),
-              );
-            }),
+            // ...List.generate(n, (index) {
+            //   double rayHeight =
+            //       smallRay && index % 2 != 0 ? smallRayHeight : bigRayHeight;
+            //   double koef = smallRay && index % 2 != 0 ? 0.35 : 0.4;
+            //   double angle = index * (pi * 2) / n;
+            //   double x = koef * base * cos(angle);
+            //   double y = -koef * base * sin(angle);
+            //   return Positioned(
+            //     top: 0.5 * constraints.maxHeight - x - 0.5 * rayHeight,
+            //     left: 0.5 * constraints.maxWidth - y - 0.5 * rayWidth,
+            //     child: Transform.rotate(
+            //       angle: angle,
+            //       child: Container(
+            //         height:
+            //             smallRay && index % 2 != 0 ? smallRayHeight : rayHeight,
+            //         width: rayWidth,
+            //         decoration: BoxDecoration(
+            //           color: Colors.amber,
+            //           borderRadius: BorderRadius.circular(0.5 * rayWidth),
+            //         ),
+            //       ),
+            //     ),
+            //   );
+            // }),
           ],
         );
       },

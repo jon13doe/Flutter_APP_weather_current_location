@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app_current_location/features/bloc/weather_bloc.dart';
 
-import 'hs_elements/index.dart';
+import '../hs_elements/index.dart';
 
 class PngView extends StatelessWidget {
   const PngView({super.key});

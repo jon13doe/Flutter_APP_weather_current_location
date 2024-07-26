@@ -1,37 +1,62 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app_current_location/features/bloc/weather_bloc.dart';
 
-import 'screens/home_screen/icons_chema.dart';
+import 'package:weather_app_current_location/features/bloc/weather_bloc.dart';
+import 'package:weather_app_current_location/generated/l10n.dart';
+
 import 'screens/index.dart';
+import 'theme/index.dart';
 
 class WeatherApp extends StatelessWidget {
   const WeatherApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: FutureBuilder(
-            future: _determinePosition(),
-            builder: (context, snap) {
-              if (snap.hasData) {
-                return BlocProvider<WeatherBloc>(
-                  create: (context) =>
-                      WeatherBloc()..add(FetchWeather(snap.data as Position)),
-                  child: IconsChemaProvider(
-                      iconsChema: IconsChema(elementsView: false),
-                      child: const HomeScreen()),
-                );
-              } else {
-                return const Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-            }));
+    return AdaptiveTheme(
+        light: customLightTheme,
+        dark: customDarkTheme,
+        initial: AdaptiveThemeMode.light,
+        builder: (light, dark) {
+          return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              home: FutureBuilder(
+                  future: _determinePosition(),
+                  builder: (context, snap) {
+                    if (snap.hasData) {
+                      return BlocProvider<WeatherBloc>(
+                        create: (context) => WeatherBloc()
+                          ..add(FetchWeather(snap.data as Position)),
+                        child: ThemeProvider(
+                          themeChema: ThemeChema(
+                            curentColorTheme: 0,
+                            simpleTheme: 0,
+                            animatedTheme: false,
+                            iconTheme: 0,
+                          ),
+                          child: const SafeArea(
+                            child: HomeScreen(),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  }));
+        });
   }
 }
 

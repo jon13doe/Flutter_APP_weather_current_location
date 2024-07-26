@@ -1,13 +1,17 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app_current_location/features/bloc/weather_bloc.dart';
-import 'package:weather_app_current_location/features/screens/home_screen/png_view.dart';
-import 'package:weather_app_current_location/features/screens/home_screen/widget_elements_view.dart';
+import 'package:weather_app_current_location/features/screens/home_screen/hs_background/index.dart';
+import 'package:weather_app_current_location/features/theme/index.dart';
 
+import 'weather_view/elements/index.dart';
 import 'hs_elements/index.dart';
-import 'icons_chema.dart';
+import 'hs_side_menu/index.dart';
+import 'weather_view/index.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,13 +20,25 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-homeScreenView(elementsView) {
-  switch (elementsView) {
-    case false:
-      return const PngView();
+backgroundColor({required int systemDarkLightTheme}) {
+  switch (systemDarkLightTheme) {
+    case 1:
+      return Colors.black;
+    case 2:
+      return Colors.white;
     default:
-      return const WidgetElementsView();
+      return Colors.yellow;
   }
+}
+
+background({required int simpleTheme}) {
+  return simpleTheme == 0
+      ? Container(
+          color: Colors.white,
+        )
+      : const RegularBackground(
+          lightTheme: true,
+        );
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -30,33 +46,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    IconsChemaProvider? iconsChemaProvider = IconsChemaProvider.of(context);
-    bool? elementsView = iconsChemaProvider?.iconsChema.elementsView;
+    ThemeProvider? themeProvider = ThemeProvider.of(context);
+    int iconTheme = themeProvider!.themeChema.iconTheme;
+    int simpleTheme = themeProvider.themeChema.simpleTheme;
+    int systemDarkLightTheme = themeProvider.themeChema.curentColorTheme;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor:
+          backgroundColor(systemDarkLightTheme: systemDarkLightTheme),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        // systemOverlayStyle: const SystemUiOverlayStyle(
-        //   statusBarBrightness: Brightness.dark,
-        // ),
-        // leading: Builder(builder: (context) {
-        //   return hideScreen
-        //       ? Container()
-        //       : IconButton(
-        //           icon: const Icon(
-        //             Icons.menu,
-        //             color: Colors.amber,
-        //             size: 32,
-        //           ),
-        //           onPressed: () {
-        //             Scaffold.of(context).openDrawer();
-        //             setState(() {
-        //               hideScreen = true;
-        //             });
-        //           });
-        // }),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.dark,
+        ),
+        leading: Builder(builder: (context) {
+          return hideScreen
+              ? Container()
+              : IconButton(
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.amber,
+                    size: 32,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                    setState(() {
+                      hideScreen = true;
+                    });
+                  });
+        }),
       ),
       body: Center(
         child: OrientationBuilder(builder: (context, orientation) {
@@ -68,52 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height,
                     child: Stack(
                       children: [
-                        Align(
-                          alignment: const AlignmentDirectional(2.5, -0.125),
-                          child: Container(
-                            height: 250,
-                            width: 250,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.pinkAccent,
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: const AlignmentDirectional(-2.5, -0.125),
-                          child: Container(
-                            height: 250,
-                            width: 250,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.pinkAccent,
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: const AlignmentDirectional(0, -1),
-                          child: Container(
-                            height: 300,
-                            width: 300,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.purpleAccent,
-                            ),
-                          ),
-                        ),
-                        BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                        ),
+                        background(simpleTheme: simpleTheme),
                         BlocBuilder<WeatherBloc, WeatherBlocState>(
                             builder: (context, state) {
                           if (state is WeatherBlocSuccess) {
                             return Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -132,17 +110,151 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 3,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      timeOfDayGreeting(
+                                          inputDate: state.weather.date!),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Expanded(
+                                  child: Center(
+                                    child: WeatherView(
+                                      code: 1,
+                                    ),
+                                  ),
                                 ),
                                 Text(
-                                  timeOfDayGreeting(
-                                      inputDate: state.weather.date!),
+                                  '${state.weather.temperature!.celsius!.round()} °C',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  state.weather.weatherMain!.toUpperCase(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                   ),
+                                ),
+                                Text(
+                                  DateFormat('EEEE dd')
+                                      .add_Hm()
+                                      .format(state.weather.date!),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        iconTheme == 1
+                                            ? Image.asset(
+                                                'assets/sunrise.png',
+                                                scale: 8,
+                                              )
+                                            : SizedBox(
+                                                height: 0.2 *
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                width: 0.2 *
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                child: const SunRiseSet(
+                                                  rise: true,
+                                                  sun: true,
+                                                ),
+                                              ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Sunrise',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat().add_Hm().format(
+                                                  state.weather.sunrise!),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        iconTheme == 1
+                                            ? Image.asset(
+                                                'assets/sunset.png',
+                                                scale: 8,
+                                              )
+                                            : SizedBox(
+                                                height: 0.2 *
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                width: 0.2 *
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                child: const SunRiseSet(
+                                                  rise: false,
+                                                  sun: true,
+                                                )),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Sunset',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat().add_Hm().format(
+                                                  state.weather.sunset!),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ],
                             );
@@ -150,7 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             return Container();
                           }
                         }),
-                        homeScreenView(elementsView),
                         if (hideScreen)
                           BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -167,18 +278,18 @@ class _HomeScreenState extends State<HomeScreen> {
               : Container();
         }),
       ),
-      // drawer: const HomeScreenSideMenu(),
-      // onDrawerChanged: (isOpened) {
-      //   if (isOpened == true) {
-      //     setState(() {
-      //       hideScreen = true;
-      //     });
-      //   } else {
-      //     setState(() {
-      //       hideScreen = false;
-      //     });
-      //   }
-      // },
+      drawer: const HomeScreenSideMenu(),
+      onDrawerChanged: (isOpened) {
+        if (isOpened == true) {
+          setState(() {
+            hideScreen = true;
+          });
+        } else {
+          setState(() {
+            hideScreen = false;
+          });
+        }
+      },
     );
   }
 }

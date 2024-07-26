@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'moon.dart';
 import 'sun.dart';
 
-class RiseSet extends StatelessWidget {
+class SunRiseSet extends StatelessWidget {
   final bool sun;
   final bool rise;
 
-  const RiseSet({
+  const SunRiseSet({
     super.key,
     required this.rise,
     required this.sun,
@@ -23,9 +23,9 @@ class RiseSet extends StatelessWidget {
         double base = constraints.maxHeight >= constraints.maxWidth
             ? constraints.maxWidth
             : constraints.maxHeight;
-        double sunBase = 0.75 * base;
+        double sunBase = base;
         double groundWidth = base;
-        double groundHeight = 0.025 * base;
+        double groundHeight = 0.033 * base;
         double horizont = 0.5 * groundHeight;
 
         return Stack(
@@ -56,7 +56,7 @@ class RiseSet extends StatelessWidget {
               return Positioned(
                 top: (0.5 + 0.5 * heightKoef) * base +
                     horizont +
-                    (index * 0.125 / n) * base,
+                    (index * 0.2 / n) * base,
                 left: 0.5 * constraints.maxWidth -
                     0.5 * ((1 - index * 1 / n) * groundWidth),
                 child: Container(
