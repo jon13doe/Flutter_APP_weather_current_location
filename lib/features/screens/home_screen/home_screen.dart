@@ -20,17 +20,6 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-backgroundColor({required int systemDarkLightTheme}) {
-  switch (systemDarkLightTheme) {
-    case 1:
-      return Colors.black;
-    case 2:
-      return Colors.white;
-    default:
-      return Colors.yellow;
-  }
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   bool hideScreen = false;
 
@@ -39,12 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ThemeChema? themeProvider = ThemeProvider.of(context);
     bool iconTheme = themeProvider!.iconTheme;
     bool simpleTheme = themeProvider.simpleTheme;
-    int systemDarkLightTheme = themeProvider.curentColorTheme;
 
     return Scaffold(
-      backgroundColor:
-          backgroundColor(systemDarkLightTheme: systemDarkLightTheme),
       extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -87,12 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const Icon(
                                     Icons.location_on,
                                     size: 14,
-                                    color: Colors.white,
                                   ),
                                   Text(
                                     '${state.weather.areaName}',
                                     style: const TextStyle(
-                                      color: Colors.white,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -105,24 +90,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                     timeOfDayGreeting(
                                         inputDate: state.weather.date!),
                                     style: const TextStyle(
-                                      color: Colors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
                               ),
-                              const Expanded(
+                              Expanded(
                                 child: Center(
                                   child: WeatherView(
-                                    code: 1,
+                                    code: state.weather.weatherConditionCode,
+                                    windSpeed: state.weather.windSpeed!,
                                   ),
                                 ),
                               ),
                               Text(
                                 '${state.weather.temperature!.celsius!.round()} °C',
                                 style: const TextStyle(
-                                  color: Colors.white,
                                   fontSize: 35,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -130,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 state.weather.weatherMain!.toUpperCase(),
                                 style: const TextStyle(
-                                  color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -140,7 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .add_Hm()
                                     .format(state.weather.date!),
                                 style: const TextStyle(
-                                  color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w300,
                                 ),
@@ -180,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const Text(
                                             'Sunrise',
                                             style: TextStyle(
-                                              color: Colors.white,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -189,7 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .add_Hm()
                                                 .format(state.weather.sunrise!),
                                             style: const TextStyle(
-                                              color: Colors.white,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
@@ -227,7 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const Text(
                                             'Sunset',
                                             style: TextStyle(
-                                              color: Colors.white,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -236,7 +215,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .add_Hm()
                                                 .format(state.weather.sunset!),
                                             style: const TextStyle(
-                                              color: Colors.white,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),

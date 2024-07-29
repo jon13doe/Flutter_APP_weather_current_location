@@ -20,6 +20,5 @@ class ThemeProvider extends InheritedNotifier<ValueNotifier<ThemeChema>> {
 
   void updateThemeChema(ThemeChema newThemeChema) {
     notifier?.value = newThemeChema;
-    notifier?.notifyListeners();
   }
 }

@@ -1,15 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Precipitation extends StatefulWidget {
-  final bool rain;
+  final int type;
   final int intensity;
-  final double wind;
+  final double windSpeed;
 
   const Precipitation({
     super.key,
-    this.intensity = 1,
-    required this.wind,
-    required this.rain,
+    this.type = 0,
+    this.intensity = 0,
+    this.windSpeed = 0,
   });
 
   @override
@@ -34,7 +36,7 @@ windSpeed({required double windSpeed}) {
       return 6.0;
     case > 17.2 && < 20.7:
       return 7.0;
-    case < 20.8:
+    case > 20.8:
       return 8.0;
     default:
       return 0.0;
@@ -44,27 +46,22 @@ windSpeed({required double windSpeed}) {
 class _PrecipitationState extends State<Precipitation> {
   @override
   Widget build(BuildContext context) {
-    double angle = windSpeed(windSpeed: widget.wind);
-    int intensity = widget.intensity > 0 ? widget.intensity : 1;
+    double angle = -windSpeed(windSpeed: widget.windSpeed) * pi / 32;
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      bool widthBase =
-          constraints.maxHeight >= constraints.maxWidth ? true : false;
-      double base = widthBase ? constraints.maxWidth : constraints.maxHeight;
-      double precipitationHorizont = 0.5 * base;
-      double precipitationSize = 0.1 * base;
+      double precipitationHorizont = 0.5 * constraints.maxWidth;
+      double precipitationSize = 0.1 * constraints.maxWidth;
       double precipitationHeight =
-          widget.rain ? precipitationSize : 0.35 * precipitationSize;
+          widget.intensity > 0 ? precipitationSize : 0.35 * precipitationSize;
       double precipitationWidth = 0.35 * precipitationSize;
-      int intensityCurrent = intensity;
 
       return SizedBox(
-        height: precipitationHeight * (2 * intensityCurrent - 1),
+        height: precipitationHeight * (2 * widget.intensity - 1),
         width: precipitationHorizont,
         child: Column(
           children: [
-            ...List.generate((2 * intensityCurrent - 1), (rowIndex) {
+            ...List.generate(2 * widget.intensity - 1, (rowIndex) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -73,13 +70,16 @@ class _PrecipitationState extends State<Precipitation> {
                       if ((rowIndex % 4 == 0 && index % 2 == 0) ||
                           (rowIndex % 4 != 0 && index % 2 != 0)) {
                         return Transform.rotate(
-                          angle: -angle,
+                          angle: angle,
                           child: Container(
                             height: precipitationHeight,
                             width: precipitationWidth,
                             decoration: BoxDecoration(
-                              color:
-                                  widget.rain ? Colors.blue[700] : Colors.white,
+                              color: [
+                                Colors.blue[700],
+                                Colors.white,
+                                Colors.grey
+                              ][widget.type],
                               borderRadius: BorderRadius.circular(
                                   0.5 * precipitationWidth),
                             ),

@@ -11,7 +11,9 @@ import 'screens/index.dart';
 import 'theme/index.dart';
 
 class WeatherApp extends StatelessWidget {
-  const WeatherApp({super.key});
+  final AdaptiveThemeMode? savedThemeMode;
+
+  const WeatherApp({super.key, this.savedThemeMode});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +33,11 @@ class WeatherApp extends StatelessWidget {
             child: AdaptiveTheme(
                 light: customLightTheme,
                 dark: customDarkTheme,
-                initial: AdaptiveThemeMode.light,
-                builder: (light, dark) {
+                initial: savedThemeMode ?? AdaptiveThemeMode.light,
+                builder: (theme, darkTheme) {
                   return MaterialApp(
+                      theme: theme,
+                      darkTheme: darkTheme,
                       debugShowCheckedModeBanner: false,
                       localizationsDelegates: const [
                         S.delegate,

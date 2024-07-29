@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_app_current_location/features/theme/index.dart';
@@ -33,7 +31,7 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
     ThemeChema theme = ThemeProvider.of(context)!;
     int curentColorTheme = theme.curentColorTheme;
     bool simpleTheme = theme.simpleTheme;
-    bool animatedTheme = theme.animatedTheme;
+    // bool animatedTheme = theme.animatedTheme;
     bool iconTheme = theme.iconTheme;
 
     return ClipRRect(
@@ -42,7 +40,8 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
         bottomRight: Radius.circular(20),
       ),
       child: Drawer(
-        backgroundColor: Colors.white.withOpacity(0.75),
+        backgroundColor:
+            Theme.of(context).drawerTheme.backgroundColor?.withOpacity(0.75),
         child: Padding(
           padding: const EdgeInsets.all(
             16,
@@ -106,27 +105,27 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
                               'Switch to ${simpleTheme ? 'regular' : 'simple'} theme'),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          DynamicIconButton(
-                            iconsList: const [
-                              Symbols.slow_motion_video,
-                              Symbols.motion_photos_pause,
-                            ],
-                            initState: animatedTheme ? 1 : 0,
-                            iconSize: 32,
-                            onStateChange: (index) {
-                              setState(() {
-                                theme
-                                    .switchAnimation(index == 0 ? false : true);
-                              });
-                            },
-                          ),
-                          Text(
-                              'Switch ${animatedTheme ? 'off' : 'on'} animation'),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     DynamicIconButton(
+                      //       iconsList: const [
+                      //         Symbols.slow_motion_video,
+                      //         Symbols.motion_photos_pause,
+                      //       ],
+                      //       initState: animatedTheme ? 1 : 0,
+                      //       iconSize: 32,
+                      //       onStateChange: (index) {
+                      //         setState(() {
+                      //           theme
+                      //               .switchAnimation(index == 0 ? false : true);
+                      //         });
+                      //       },
+                      //     ),
+                      //     Text(
+                      //         'Switch ${animatedTheme ? 'off' : 'on'} animation'),
+                      //   ],
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -148,12 +147,13 @@ class _SideMenuBarState extends State<HomeScreenSideMenu> {
                               'Switch ${iconTheme ? 'off' : 'on'} weather icons'),
                         ],
                       ),
-                      TextButton(
-                        child: const Text('Parameters to console'),
-                        onPressed: () {
-                          log(theme.param());
-                        },
-                      ),
+                      //Button to log parameters from theme provider
+                      // TextButton(
+                      //   child: const Text('Parameters to console'),
+                      //   onPressed: () {
+                      //     log(theme.param());
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
