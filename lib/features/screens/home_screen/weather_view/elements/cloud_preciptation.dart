@@ -6,6 +6,7 @@ import 'cloud.dart';
 import 'precipitation.dart';
 
 class CloudPreciptation extends StatefulWidget {
+  final bool thunder;
   final int cloudColor;
   final int preciptationType;
   final int preciptationIntencity;
@@ -13,6 +14,7 @@ class CloudPreciptation extends StatefulWidget {
 
   const CloudPreciptation({
     super.key,
+    required this.thunder,
     required this.cloudColor,
     required this.preciptationType,
     required this.preciptationIntencity,
@@ -32,14 +34,16 @@ class _CloudPreciptationState extends State<CloudPreciptation>
         return Stack(
           alignment: Alignment.center,
           children: [
-            Align(
-              alignment: Alignment.bottomCenter,
-              heightFactor: 2,
-              child: SizedBox(
-                height: 0.3 * constraints.maxHeight,
-                child: const Thunder(),
-              ),
-            ),
+            widget.thunder
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    heightFactor: 2,
+                    child: SizedBox(
+                      height: 0.3 * constraints.maxHeight,
+                      child: const Thunder(),
+                    ),
+                  )
+                : const SizedBox(),
             Column(
               children: [
                 SizedBox(
@@ -60,22 +64,6 @@ class _CloudPreciptationState extends State<CloudPreciptation>
                   ),
                 ),
               ],
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              widthFactor: 5,
-              child: SizedBox(
-                height: 0.2 * constraints.maxHeight,
-                child: const Thunder(),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              widthFactor: 5,
-              child: SizedBox(
-                height: 0.2 * constraints.maxHeight,
-                child: const Thunder(),
-              ),
             ),
           ],
         );

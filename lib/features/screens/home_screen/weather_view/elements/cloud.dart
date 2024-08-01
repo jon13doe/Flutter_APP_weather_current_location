@@ -46,7 +46,7 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
       case 2:
         return Colors.black;
       default:
-        return Colors.white;
+        return Color.fromARGB(255, 123, 246, 255);
     }
   }
 }

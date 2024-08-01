@@ -23,6 +23,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool hideScreen = false;
 
+  String getWeatherIcon(int code) {
+    switch (code) {
+      case >= 200 && < 300:
+        return 'thunderstorm';
+      case >= 300 && < 400:
+        return 'drizzle';
+      case >= 500 && < 600:
+        return 'rain';
+      case >= 600 && < 700:
+        return 'snow';
+      case >= 700 && < 800:
+        return 'clouds';
+      case == 800:
+        return 'sun';
+      case > 800 && <= 804:
+        return 'clouds_with_sun';
+      default:
+        return 'sun';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeChema? themeProvider = ThemeProvider.of(context);
@@ -98,10 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Expanded(
                                 child: Center(
-                                  child: WeatherView(
-                                    code: state.weather.weatherConditionCode,
-                                    windSpeed: state.weather.windSpeed!,
-                                  ),
+                                  child: iconTheme
+                                      ? Image.asset(
+                                          'assets/${getWeatherIcon(state.weather.weatherConditionCode!)}.png',
+                                          scale: 2.5,
+                                        )
+                                      : WeatherView(
+                                          code: state
+                                              .weather.weatherConditionCode,
+                                          windSpeed: state.weather.windSpeed!,
+                                        ),
                                 ),
                               ),
                               Text(

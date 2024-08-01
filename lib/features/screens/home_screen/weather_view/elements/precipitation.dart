@@ -56,52 +56,54 @@ class _PrecipitationState extends State<Precipitation> {
           widget.intensity > 0 ? precipitationSize : 0.35 * precipitationSize;
       double precipitationWidth = 0.35 * precipitationSize;
 
-      return SizedBox(
-        height: precipitationHeight * (2 * widget.intensity - 1),
-        width: precipitationHorizont,
-        child: Column(
-          children: [
-            ...List.generate(2 * widget.intensity - 1, (rowIndex) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+      return widget.intensity == 0
+          ? const SizedBox()
+          : SizedBox(
+              height: precipitationHeight * (2 * widget.intensity - 1),
+              width: precipitationHorizont,
+              child: Column(
                 children: [
-                  ...List.generate(7, (index) {
-                    if (rowIndex % 2 == 0) {
-                      if ((rowIndex % 4 == 0 && index % 2 == 0) ||
-                          (rowIndex % 4 != 0 && index % 2 != 0)) {
-                        return Transform.rotate(
-                          angle: angle,
-                          child: Container(
-                            height: precipitationHeight,
-                            width: precipitationWidth,
-                            decoration: BoxDecoration(
-                              color: [
-                                Colors.blue[700],
-                                Colors.white,
-                                Colors.grey
-                              ][widget.type],
-                              borderRadius: BorderRadius.circular(
-                                  0.5 * precipitationWidth),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return SizedBox(
-                          width: precipitationHeight,
-                        );
-                      }
-                    } else {
-                      return SizedBox(
-                        height: 0.5 * precipitationHeight,
-                      );
-                    }
+                  ...List.generate(2 * widget.intensity - 1, (rowIndex) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ...List.generate(7, (index) {
+                          if (rowIndex % 2 == 0) {
+                            if ((rowIndex % 4 == 0 && index % 2 == 0) ||
+                                (rowIndex % 4 != 0 && index % 2 != 0)) {
+                              return Transform.rotate(
+                                angle: angle,
+                                child: Container(
+                                  height: precipitationHeight,
+                                  width: precipitationWidth,
+                                  decoration: BoxDecoration(
+                                    color: [
+                                      Colors.blue[700],
+                                      Colors.white,
+                                      Colors.grey
+                                    ][widget.type],
+                                    borderRadius: BorderRadius.circular(
+                                        0.5 * precipitationWidth),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return SizedBox(
+                                width: precipitationHeight,
+                              );
+                            }
+                          } else {
+                            return SizedBox(
+                              height: 0.5 * precipitationHeight,
+                            );
+                          }
+                        }),
+                      ],
+                    );
                   }),
                 ],
-              );
-            }),
-          ],
-        ),
-      );
+              ),
+            );
     });
   }
 }

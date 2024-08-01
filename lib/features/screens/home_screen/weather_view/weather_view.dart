@@ -45,7 +45,10 @@ class _WeatherViewState extends State<WeatherView> {
                         child: SizedBox(
                           height: 0.75 * constraints.maxHeight,
                           child: CloudPreciptation(
-                            cloudColor: widget.code! % 100,
+                            thunder: widget.code! ~/ 100 == 2,
+                            cloudColor: widget.code! ~/ 100 == 8
+                                ? 0
+                                : widget.code! % 10,
                             preciptationType:
                                 preciptationType(index: widget.code),
                             preciptationIntencity:
@@ -76,11 +79,15 @@ class _WeatherViewState extends State<WeatherView> {
       return 1;
     } else if (index ~/ 100 == 5 || index ~/ 100 == 3 || index ~/ 100 == 2) {
       return 0;
+    } else {
+      return 2;
     }
   }
 
   preciptationIntencity({int? index}) {
-    if ([201, 231, 301, 311, 501, 601, 613, 616].contains(index)) {
+    if ([802, 803].contains(index)) {
+      return 0;
+    } else if ([201, 231, 301, 311, 501, 601, 613, 616].contains(index)) {
       return 2;
     } else if ([
       202,
